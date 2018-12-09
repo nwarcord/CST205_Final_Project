@@ -1,0 +1,52 @@
+CST 205 - Final Project
+
+To-do
+########################
+
+- Necromancer invisible until attacks
+
+- Design for clues to "winning" grave
+
+- Read command that can read a gravestone which delivers a clue
+
+- Dig command that will attempt to dig the grave
+
+- Player frozen for (1 or 2) turns if they dig wrong grave
+
+- Concept Decision: Should the player's movement be increased to 128 pixels (up from 64)?
+
+- Tommyknocker sprite added to game images (sprite is already completed)
+
+- Command to drop a tommyknocker
+
+- Tommyknocker is visible on screen until necromancer "attacks" it (destroyed after)
+
+- Necromancer switches targets from player to tommyknocker if tommyknocker is present on screen
+
+- Victory condition
+
+- Victory screen
+
+- Intro screen after title (will include controls)
+
+- Additional prompt screens (like the one implemented that tells user they can't move a certain direction)
+
+- Sound effects:
+
+	- Necromancer laugh
+
+	- Player hit (maybe preceded by an attack sound from necro)
+
+	- Grave digging
+
+	- Maybe: Footfalls while moving
+
+	- Player frozen (maybe ghost sound effect)
+
+Stretch goals:
+
+- Ghost appears when player is frozen (have possible sprite)
+
+- Necromancer's sprite faces the player when attacking (directional sprites are already in folder)
+
+- Death animation for player and/or necromancer
