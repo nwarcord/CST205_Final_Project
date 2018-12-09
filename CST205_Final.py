@@ -3,14 +3,15 @@ from random import randrange
 from thread import *
 
 #Local directory where game files are located.
-file = "C:\Users\NAcor\Desktop\Coding\Git Repos\CST205_Final_Project"
-imageFile = file+"\CST205_Final_Images"
+showInformation("On the next screen, select the CST205_Final_Project directory on your local machine")
+file = setMediaPath()
+imageFile = file+"/CST205_Final_Images"
 coords = {}
 
 tracks = {
-  "Intro" : makeSound(file+"\Piano_Intro.wav"),
-  "Main" : makeSound(file+"\Main_Piano.wav"),
-  "Game Over" : makeSound(file+"\Game_Over_Full.wav")
+  "Intro" : makeSound(file+"/Piano_Intro.wav"),
+  "Main" : makeSound(file+"/Main_Piano.wav"),
+  "Game Over" : makeSound(file+"/Game_Over_Full.wav")
 }
 
 def get_turtle(x,y,w):
@@ -228,19 +229,19 @@ class map:
 class images:
   def __init__(self):
     self.library = {
-      "1 health" : imageFile+"\Health_One.png",
-      "2 health" : imageFile+"\Health_Two.png",
-      "3 health" : imageFile+"\Health_Full.png",
-      "Player" : imageFile+"\Hero_Graveyard_2CK_3.png",
-      "Necro front" : imageFile+"\Necromancer_front_face_CK.png",
-      "Necro back" : imageFile+"\Necromancer_back_face_CK.png",
-      "Necro left" : imageFile+"\Necromancer_left_face_CK.png",
-      "Necro right" : imageFile+"\Necromancer_right_face_CK.png",
-      "Map base" : imageFile+"\Graveyard.png",
-      "Title 1" : imageFile+"\Game_Title_Screen.png",
-      "Title 2" : imageFile+"\Game_Title_Screen_2.png",
-      "Wrong Way" : imageFile+"\Wrong_Way.png",
-      "Game Over" : imageFile+"\Game_Over_Screen.png"
+      "1 health" : imageFile+"/Health_One.png",
+      "2 health" : imageFile+"/Health_Two.png",
+      "3 health" : imageFile+"/Health_Full.png",
+      "Player" : imageFile+"/Hero_Graveyard_2CK_3.png",
+      "Necro front" : imageFile+"/Necromancer_front_face_CK.png",
+      "Necro back" : imageFile+"/Necromancer_back_face_CK.png",
+      "Necro left" : imageFile+"/Necromancer_left_face_CK.png",
+      "Necro right" : imageFile+"/Necromancer_right_face_CK.png",
+      "Map base" : imageFile+"/Graveyard.png",
+      "Title 1" : imageFile+"/Game_Title_Screen.png",
+      "Title 2" : imageFile+"/Game_Title_Screen_2.png",
+      "Wrong Way" : imageFile+"/Wrong_Way.png",
+      "Game Over" : imageFile+"/Game_Over_Screen.png"
       #"TK" : imageFile+"",
       #"Ghost" : imageFile+""
     }
@@ -302,4 +303,4 @@ def main():
         graveyard.get_map().hideFrame()
         game_over()
         return
-main()
+main()                                
