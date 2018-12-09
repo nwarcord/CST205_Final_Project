@@ -3,7 +3,7 @@ from random import randrange
 from thread import *
 
 #Local directory where game files are located.
-file = ""
+file = "C:\Users\NAcor\Desktop\Coding\Git Repos\CST205_Final_Project"
 imageFile = file+"\CST205_Final_Images"
 coords = {}
 
@@ -45,7 +45,7 @@ class character:
     sprite = get_turtle(x,y,self.map)
     drop(sprite,redraw)
     remove_turtle(sprite,self.map)
-    repaint(self.map)
+    ##repaint(self.map)
   def get_pos(self):
     return [self.position["x"],self.position["y"]]
   def set_position(self,move):
@@ -167,7 +167,7 @@ class necro(character):
     hero = artemis.get_pos()
     artemis.draw_self(hero[0],hero[1])
     self.update_movement()
-    repaint(self.map)
+    ##repaint(self.map)
   def in_path(self, path, tile):
     for item in path:
       if tile[0] == item[0] and tile[1] == item[1] and item[2] <= tile[2]:
