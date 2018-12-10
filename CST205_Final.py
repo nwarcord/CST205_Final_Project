@@ -114,6 +114,14 @@ class player(character):
       graveyard.reset_map()
       self.map = graveyard.get_map()
       self.draw_self(256,512)
+  """
+  def update_movement(self):
+    current = self.get_pos()
+    self.movement["w"] = [current[0],current[1]-128]
+    self.movement["a"] = [current[0]-128,current[1]]
+    self.movement["s"] = [current[0],current[1]+128]
+    self.movement["d"] = [current[0]+128,current[1]]
+  """
 
 class necro(character):
   sleeping = True
@@ -292,6 +300,7 @@ def main():
     temp = raw_input(">>> ",)
     if temp == "exit":
       graveyard.get_map().hideFrame()
+      audio_player("stop","Main")
       return
     elif temp not in ['w','a','s','d']:
       print "Invalid input!"
