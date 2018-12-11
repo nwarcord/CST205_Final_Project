@@ -10,7 +10,7 @@ coords = {}
 
 tracks = {
   "Intro" : makeSound(file+"/Piano_Intro.wav"),
-  "Main" : makeSound(file+"/Main_Piano.wav"),
+  "Main" : makeSound(file+"/bartlebeats.wav"),
   "Game Over" : makeSound(file+"/Game_Over_Full.wav"),
   "Player hit" : makeSound(file+"/Player_Hit.wav"),
   "Necro Laugh" : makeSound(file+"/Necro_Laugh.wav"),
