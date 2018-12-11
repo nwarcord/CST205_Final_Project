@@ -114,14 +114,18 @@ class player(character):
       graveyard.reset_map()
       self.map = graveyard.get_map()
       self.draw_self(256,512)
-  """
+  def examine(self):
+    pass
+  def dig(self):
+    pass
+"""
   def update_movement(self):
     current = self.get_pos()
     self.movement["w"] = [current[0],current[1]-128]
     self.movement["a"] = [current[0]-128,current[1]]
     self.movement["s"] = [current[0],current[1]+128]
     self.movement["d"] = [current[0]+128,current[1]]
-  """
+"""
 
 class necro(character):
   sleeping = True
@@ -233,7 +237,25 @@ class map:
       self.coords[str(x)].append(768)
       if not(1472 <= x <= 1600):
         self.coords[str(x)].append(512)
+"""
+class GameState:
+  def __init__(self):
+    self.graves = {}
+    self.target1 = ""
+    self.target2 = ""
+    self.final = "" #Will be the pillar with sign always
+  def set_graves(self):
+    pass
+  def update_necro(self):
+    pass
+"""
+class Grave:
+  def __init__(self):
+    self.position = {"x":0,"y",0}
+    self.opened = False
+    self.clue = ""
     
+
 class images:
   def __init__(self):
     self.library = {
@@ -249,7 +271,9 @@ class images:
       "Title 1" : imageFile+"/Game_Title_Screen.png",
       "Title 2" : imageFile+"/Game_Title_Screen_2.png",
       "Wrong Way" : imageFile+"/Wrong_Way.png",
-      "Game Over" : imageFile+"/Game_Over_Screen.png"
+      "Game Over" : imageFile+"/Game_Over_Screen.png",
+      "Arrow" : imageFile+"/Graveyard_Arrow.png",
+      "Open Grave": imageFile+"Dug_Grave.png"
       #"TK" : imageFile+"",
       #"Ghost" : imageFile+""
     }
@@ -302,8 +326,12 @@ def main():
       graveyard.get_map().hideFrame()
       audio_player("stop","Main")
       return
-    elif temp not in ['w','a','s','d']:
+    elif temp not in ['w','a','s','d','e','q']:
       print "Invalid input!"
+    elif temp == 'e':
+      artemis.examine()
+    elif temp == 'q':
+      artemis.dig()
     else:
       artemis.move(temp)
       erebus.awake()
