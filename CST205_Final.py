@@ -117,7 +117,16 @@ class player(character):
   def examine(self):
     pass
   def dig(self):
-    pass
+    coords = "".join(self.get_pos()) #needs to convert to string
+    if coords in gamestate.graves:
+      gamestate.graves[coords].dig_grave()
+      grave = get_turtle(384,256,self.map)
+      sprite = pics.get_sprite("Open Grave")
+      drop(grave,sprite)
+      remove_turtle(grave,self.map)
+      #pass
+    else:
+      print self.position
 """
   def update_movement(self):
     current = self.get_pos()
