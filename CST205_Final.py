@@ -250,7 +250,7 @@ class map:
 class gamestate:
   def __init__(self):
     self.undertaker()
-    self.graves{}
+    self.graves()
   def undertaker(self):
     for x in range(384, 1920, 256):
       for y in range(256, 1024, 256):
@@ -269,7 +269,7 @@ class gamestate:
 
 class grave:
   def __init__(self, x, y):
-    self.position = {"x": x, "y", y}
+    self.position = {"x": x, "y": y}
     self.activated = False
     self.target = False
   def get_grave_loc(self):
@@ -365,4 +365,4 @@ def main():
         graveyard.get_map().hideFrame()
         game_over()
         return
-main()                                
+main()                                                                          
