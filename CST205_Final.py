@@ -237,24 +237,40 @@ class map:
       self.coords[str(x)].append(768)
       if not(1472 <= x <= 1600):
         self.coords[str(x)].append(512)
-"""
-class GameState:
+
+class gamestate:
   def __init__(self):
-    self.graves = {}
-    self.target1 = ""
-    self.target2 = ""
-    self.final = "" #Will be the pillar with sign always
-  def set_graves(self):
+    self.undertaker()
+    self.graves{}
+  def undertaker(self):
+    for x in range(384, 1920, 256):
+      for y in range(256, 1024, 256):
+        graves[str(x)+str(y)] = grave(x,y)
+  def set_target(self):
+    for i in range(0,2):
+      x = randrange(384,1920,256)
+      y = randrange(256,1024,256)
+      target = self.graves[str(x)+str(y)]
+      if target.target is True:
+        i -= 1
+      else:
+        target.target = True
+  def grave_digger(self,gravesite):
     pass
-  def update_necro(self):
+
+class grave:
+  def __init__(self, x, y):
+    self.position = {"x": x, "y", y}
+    self.activated = False
+    self.target = False
+  def get_grave_loc(self):
+    return [self.position['x'],self.position['y']]
+  def dig_grave(self):
+    #self.activated = True
+    #if self.target == False:
+      #return self.get_grave_loc
+    #return False
     pass
-"""
-class Grave:
-  def __init__(self):
-    self.position = {"x":0,"y",0}
-    self.opened = False
-    self.clue = ""
-    
 
 class images:
   def __init__(self):
