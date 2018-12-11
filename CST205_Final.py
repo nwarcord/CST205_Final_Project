@@ -11,7 +11,10 @@ coords = {}
 tracks = {
   "Intro" : makeSound(file+"/Piano_Intro.wav"),
   "Main" : makeSound(file+"/Main_Piano.wav"),
-  "Game Over" : makeSound(file+"/Game_Over_Full.wav")
+  "Game Over" : makeSound(file+"/Game_Over_Full.wav"),
+  "Player hit" : makeSound(file+"/Player_Hit.wav"),
+  "Necro Laugh" : makeSound(file+"/Necro_Laugh.wav"),
+  "Grave Dig Sound" : makeSound(file+"/Grave_Dig_Sound.wav")
 }
 
 def get_turtle(x,y,w):
@@ -33,6 +36,20 @@ def audio_player(mode,track):
   stopPlaying(tracks[track])
   return
 
+def change_background(name,position):
+  sprite = pics.get_sprite(name)
+  map_x = position[0]
+  map_y = position[1]
+  for x in range(0,getWidth(sprite)):
+    for y in range(0,getHeight(sprite)):
+      current = getPixel(sprite,x,y)
+      if getColor(current) == makeColor(255,174,201):
+        setColor(current, getColor(getPixel(graveyard.get_map().getPicture(),map_x,map_y)))
+      map_y += 1
+    map_y = position[1]
+    map_x += 1
+  return sprite
+
 class character:
   def __init__(self,map):
     self.name = ""
@@ -42,7 +59,8 @@ class character:
     self.movement = {}
     #self.update_movement()
   def draw_self(self,x,y):
-    redraw = self.change_background(self.name)
+    #redraw = self.change_background(self.name)
+    redraw = change_background(self.name,[x,y])
     sprite = get_turtle(x,y,self.map)
     drop(sprite,redraw)
     remove_turtle(sprite,self.map)
@@ -53,19 +71,19 @@ class character:
     current = self.position
     current["x"] = move[0]
     current["y"] = move[1]
-  def change_background(self,name):
-    sprite = pics.get_sprite(name)
-    map_x = self.position["x"]
-    map_y = self.position["y"]
-    for x in range(0,getWidth(sprite)):
-      for y in range(0,getHeight(sprite)):
-        current = getPixel(sprite,x,y)
-        if getColor(current) == makeColor(255,174,201):
-          setColor(current, getColor(getPixel(self.map.getPicture(),map_x,map_y)))
-        map_y += 1
-      map_y = self.position["y"]
-      map_x += 1
-    return sprite
+  #def change_background(self,name):
+    #sprite = pics.get_sprite(name)
+    #map_x = self.position["x"]
+    #map_y = self.position["y"]
+    #for x in range(0,getWidth(sprite)):
+      #for y in range(0,getHeight(sprite)):
+        #current = getPixel(sprite,x,y)
+        #if getColor(current) == makeColor(255,174,201):
+          #setColor(current, getColor(getPixel(self.map.getPicture(),map_x,map_y)))
+        #map_y += 1
+      #map_y = self.position["y"]
+      #map_x += 1
+    #return sprite
   def move(self,direction):
     path = self.movement[direction]
     open = graveyard.check_valid(path)
@@ -114,19 +132,48 @@ class player(character):
       graveyard.reset_map()
       self.map = graveyard.get_map()
       self.draw_self(256,512)
+  def arrow(self,grave):
+    hero = self.get_pos()
+    arrow = get_turtle((hero[0]+128),hero[1],self.map)
+    #sprite = pics.get_sprite("Arrow")
+    #self.change_background()
+    turnToFace(arrow,grave[0],grave[1])
+    redraw = change_background("Arrow",[hero[0]+128,hero[1]])
+    drop(arrow,redraw)
+    remove_turtle(arrow,self.map)
   def examine(self):
-    pass
-  def dig(self):
-    coords = "".join(self.get_pos()) #needs to convert to string
+    hero = self.get_pos()
+    coords = str(hero[0])+str(hero[1])
+    closest = 0
     if coords in gamestate.graves:
-      gamestate.graves[coords].dig_grave()
-      grave = get_turtle(384,256,self.map)
-      sprite = pics.get_sprite("Open Grave")
-      drop(grave,sprite)
-      remove_turtle(grave,self.map)
-      #pass
+      if gamestate.graves[coords].target == True:
+        return
+      else:
+        for grave in gamestate.graves.values():
+          if grave.target == True:
+            if closest == 0:
+              closest = grave
+            elif closest.grave_distance(hero) > grave.grave_distance(hero):
+              closest = grave
+        if closest == 0:
+          return ##Prompt that tells player to head for the pillar!
+        else:
+          self.arrow(closest.get_grave_loc())
+  def dig(self):
+    hero = self.get_pos()
+    coords = str(hero[0])+str(hero[1]) #needs to convert to string
+    if coords in gamestate.graves:
+      if gamestate.graves[coords].dig_grave():
+        audio_player("play","Grave Dig Sound")
+        grave = get_turtle(hero[0],hero[1],self.map)
+        sprite = pics.get_sprite("Open Grave")
+        drop(grave,sprite)
+        remove_turtle(grave,self.map)
+        self.draw_self(hero[0],hero[1])
+        return
+      ##Will be a prompt that appears and says "You can't dig there!"
     else:
-      print self.position
+      print self.position ##Will be a prompt that appears and says "You can't dig there!"
 """
   def update_movement(self):
     current = self.get_pos()
@@ -201,9 +248,15 @@ class necro(character):
       if tile[2] == value and adjacent in self.movement.values():
         return tile
   def attack(self):
-    if artemis.get_pos() in self.movement.values() or artemis.get_pos() == self.get_pos():
+    hero = artemis.get_pos()
+    enemy = self.get_pos()
+    if hero in self.movement.values() or hero == enemy:
+      audio_player("play","Player hit")
       artemis.hit()
       return True
+    elif abs((hero[0]+hero[1]) - (enemy[0]+enemy[1])) <= 128:
+      audio_player("play","Necro Laugh")
+      return True ##Don't know about this. Trying it out.
     return False
 
 class map:
@@ -219,6 +272,7 @@ class map:
   def reset_map(self):
     self.graveyard.setPicture(pics.get_sprite("Map base"))
     artemis.health_meter()
+    gamestate.print_open_graves()
     if erebus.visible:
       pos = erebus.get_pos()
       erebus.draw_self(pos[0],pos[1])
@@ -247,14 +301,18 @@ class map:
       if not(1472 <= x <= 1600):
         self.coords[str(x)].append(512)
 
-class gamestate:
-  def __init__(self):
+class Gamestate:
+  def __init__(self,map):
+    self.graves = {}
+    self.open_graves = []
+    self.map = map
     self.undertaker()
-    self.graves{}
+    self.targets = []
+    self.set_target()
   def undertaker(self):
     for x in range(384, 1920, 256):
       for y in range(256, 1024, 256):
-        graves[str(x)+str(y)] = grave(x,y)
+        self.graves[str(x)+str(y)] = grave(x,y)
   def set_target(self):
     for i in range(0,2):
       x = randrange(384,1920,256)
@@ -264,22 +322,36 @@ class gamestate:
         i -= 1
       else:
         target.target = True
+        self.targets.append(target)
+  def print_open_graves(self):
+    for grave in self.open_graves:
+      loc = grave.get_grave_loc()
+      hole = get_turtle(loc[0],loc[1],self.map)
+      drop(hole,pics.get_sprite("Open Grave"))
+      remove_turtle(hole,self.map)
   def grave_digger(self,gravesite):
     pass
 
 class grave:
   def __init__(self, x, y):
-    self.position = {"x": x, "y", y}
+    self.position = {"x": x, "y": y}
     self.activated = False
     self.target = False
   def get_grave_loc(self):
     return [self.position['x'],self.position['y']]
   def dig_grave(self):
-    #self.activated = True
+    if self.activated == True:
+      return False
+    self.activated = True
+    gamestate.open_graves.append(self)
+    return True
     #if self.target == False:
       #return self.get_grave_loc
     #return False
-    pass
+    #pass
+  def grave_distance(self,other):
+    self_pos = self.get_grave_loc()
+    return abs((self_pos[0]+self_pos[1])-(other[0]+other[1]))
 
 class images:
   def __init__(self):
@@ -298,7 +370,7 @@ class images:
       "Wrong Way" : imageFile+"/Wrong_Way.png",
       "Game Over" : imageFile+"/Game_Over_Screen.png",
       "Arrow" : imageFile+"/Graveyard_Arrow.png",
-      "Open Grave": imageFile+"Dug_Grave.png"
+      "Open Grave": imageFile+"/Dug_Grave.png"
       #"TK" : imageFile+"",
       #"Ghost" : imageFile+""
     }
@@ -340,6 +412,7 @@ def game_over():
 pics = images()
 title_screen()
 graveyard = map()
+gamestate = Gamestate(graveyard.get_map())
 artemis = player(graveyard.get_map())
 erebus = necro(graveyard.get_map())
 
