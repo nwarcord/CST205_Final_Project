@@ -16,7 +16,8 @@ tracks = {
   "Game Over" : makeSound(file+"/Game_Over_Full.wav"),
   "Player hit" : makeSound(file+"/Player_Hit.wav"),
   "Necro Laugh" : makeSound(file+"/Necro_Laugh.wav"),
-  "Grave Dig Sound" : makeSound(file+"/Grave_Dig_Sound.wav")
+  "Grave Dig Sound" : makeSound(file+"/Grave_Dig_Sound.wav"),
+  "Win" : makeSound(file+"/Game_Over_Single_Chord.wav")
 }
 
 # get_turtle takes x, y coordinates and w (world) as parameters
@@ -544,12 +545,16 @@ def game_over():
 def win():
   champ = makeWorld(1920,1024)
   screen = get_turtle(0,0,champ)
+  audio_player("stop","Main") # game over. stop playing music
+  graveyard.get_map().hideFrame() # hide the frame
   # Draw the Win image to the world
   drop(screen,pics.get_sprite("Win"))
   # Play Win music
+  audio_player("play","Win")
   audio_player("play","Necro Laugh")
   # We're done with you, turtle, go away!
   remove_turtle(screen,champ)
+  quit()
 
 pics = images() # constructs an image object (dictionary of game map images)
 title_screen() # constructs the title screen (two images repeatedly dropped)
