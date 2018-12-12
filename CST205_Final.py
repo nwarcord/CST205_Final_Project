@@ -174,7 +174,7 @@ class player(character):
     drop(arrow,redraw)
     remove_turtle(arrow,self.map)
     
-  #  Examine the grave. Provides a hint arrow in the
+  # Examine the grave. Provides a hint arrow in the
   # direction of the correct grave
   def examine(self):
     hero = self.get_pos()
@@ -543,26 +543,27 @@ gamestate = Gamestate(graveyard.get_map()) # gets the state of our game
 artemis = player(graveyard.get_map())  # constructs our hero
 erebus = necro(graveyard.get_map())    # constructs our foe
 
+# Runs the game after the title screen thread is exited
 def main():
-  audio_player("play","Main")
-  while True:
-    temp = raw_input(">>> ",)
-    if temp == "exit":
+  audio_player("play","Main") # play the main bg music
+  while True: 
+    temp = raw_input(">>> ",) # wait for user input
+    if temp == "exit": # exit game by hiding the frame and stopping music
       graveyard.get_map().hideFrame()
       audio_player("stop","Main")
       return
-    elif temp not in ['w','a','s','d','e','q']:
+    elif temp not in ['w','a','s','d','e','q']: # only allowable "moves"
       print "Invalid input!"
-    elif temp == 'e':
+    elif temp == 'e': # examine the grave
       artemis.examine()
-    elif temp == 'q':
+    elif temp == 'q': # dig the grave
       artemis.dig()
     else:
-      artemis.move(temp)
-      erebus.awake()
-      if artemis.health == 0:
-        audio_player("stop","Main")
-        graveyard.get_map().hideFrame()
-        game_over()
+      artemis.move(temp) # try to move in the direction indicated by wasd
+      erebus.awake() # necro's turn
+      if artemis.health == 0: # lose condition
+        audio_player("stop","Main") # game over. stop playing music
+        graveyard.get_map().hideFrame() # hide the grame
+        game_over() # bye-bye
         return
 main()                      
