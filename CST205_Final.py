@@ -563,7 +563,7 @@ def main():
       erebus.awake() # necro's turn
       if artemis.health == 0: # lose condition
         audio_player("stop","Main") # game over. stop playing music
-        graveyard.get_map().hideFrame() # hide the grame
+        graveyard.get_map().hideFrame() # hide the frame
         game_over() # bye-bye
         return
 main()                      
