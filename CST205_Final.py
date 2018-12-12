@@ -195,6 +195,7 @@ class player(character):
             elif closest.grave_distance(hero) > grave.grave_distance(hero):
               closest = grave
         if closest == 0:
+          print("Head to the pillar")
           return ##Prompt that tells player to head for the pillar!
         else:
           self.arrow(closest.get_grave_loc())
@@ -213,6 +214,8 @@ class player(character):
         drop(grave,sprite)
         remove_turtle(grave,self.map)
         self.draw_self(hero[0],hero[1])
+        if gamestate.graves[coords].target == True:
+          win()
         return
       ##Will be a prompt that appears and says "You can't dig there!"
       
@@ -392,6 +395,7 @@ class Gamestate:
     self.undertaker() # ?
     self.targets = []
     self.set_target()
+
   
   # stretch?  
   def undertaker(self):
@@ -476,7 +480,8 @@ class images:
       "Wrong Way" : imageFile+"/Wrong_Way.png",
       "Game Over" : imageFile+"/Game_Over_Screen.png",
       "Arrow" : imageFile+"/Graveyard_Arrow.png",
-      "Open Grave": imageFile+"/Dug_Grave.png"
+      "Open Grave": imageFile+"/Dug_Grave.png",
+      "Win": imageFile+"/Win.png"
       #"TK" : imageFile+"",
       #"Ghost" : imageFile+""
     }
@@ -535,6 +540,16 @@ def game_over():
   audio_player("play","Game Over")
   # We're done with you, turtle, go away!
   remove_turtle(screen,dead)
+  
+def win():
+  champ = makeWorld(1920,1024)
+  screen = get_turtle(0,0,champ)
+  # Draw the Win image to the world
+  drop(screen,pics.get_sprite("Win"))
+  # Play Win music
+  audio_player("play","Necro Laugh")
+  # We're done with you, turtle, go away!
+  remove_turtle(screen,champ)
 
 pics = images() # constructs an image object (dictionary of game map images)
 title_screen() # constructs the title screen (two images repeatedly dropped)
