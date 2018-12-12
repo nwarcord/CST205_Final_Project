@@ -1,3 +1,18 @@
+# Crypts of Chelon
+# By Team SCSI Logic
+# Nathan Warren-Acord, Sara Kazemi, Ryan Dorrity, and Cody Young
+# Completed for CST 205
+
+# a rougelike game created in JES
+# use the console for user input
+# w a s d keys are used to move
+# e is used to examine a grave
+# q is used to dig a grave
+
+# objective is to dig up the target grave before the necromancer gets you
+# lose condition: necromancer gets you three times (your health is 0)
+# win condition - you dig up the target grave
+
 from time import *
 from random import randrange
 from thread import *
